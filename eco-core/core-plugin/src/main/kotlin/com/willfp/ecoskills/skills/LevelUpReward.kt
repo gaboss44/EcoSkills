@@ -13,7 +13,9 @@ class LevelUpReward(
     private val startLevel: Int?,
     private val endLevel: Int?,
     private val every: Int?,
-    private val levelList: List<Int>?
+    private val levelList: List<Int>?,
+    private val notLevelList: List<Int>?,
+    private val overrideLevels: Map<Int, Int>?
 ) {
     fun getCumulativeLevels(level: Int): Int {
         var sum = 0
@@ -29,19 +31,26 @@ class LevelUpReward(
 
             if (every != null) {
                 if (endLevel != null) {
-                    val num = ((startLevel ?: 1)..endLevel).indexOf(skillLevel) + 1
+                    val num = ((startLevel ?: 1)..endLevel).indexOf(skillLevel)
                     if (num % every != 0) {
                         continue
                     }
-                } else if ((skillLevel - (startLevel ?: 0)) % every != 0) {
+                } else if ((skillLevel - (startLevel ?: 1)) % every != 0) {
                     continue
                 }
             }
+
             if (levelList != null && !levelList.contains(skillLevel)) {
                 continue
             }
 
-            sum += levels
+            if (notLevelList != null && notLevelList.contains(skillLevel)) {
+                continue
+            }
+
+            val add = overrideLevels?.get(skillLevel) ?: levels
+
+            sum = sum + add
         }
 
         return sum
@@ -58,21 +67,28 @@ class LevelUpReward(
 
         if (every != null) {
             if (endLevel != null) {
-                val num = ((startLevel ?: 1)..endLevel).indexOf(level) + 1
+                val num = ((startLevel ?: 1)..endLevel).indexOf(level)
                 if (num % every != 0) {
                     return
                 }
-            } else if ((level - (startLevel ?: 0)) % every != 0) {
+            } else if ((level - (startLevel ?: 1)) % every != 0) {
                 return
             }
         }
+
         if (levelList != null && !levelList.contains(level)) {
             return
         }
 
+        if (notLevelList != null && notLevelList.contains(level)) {
+            return
+        }
+
+        val toGive = overrideLevels?.get(level) ?: levels
+
         when (reward) {
-            is Effect -> player.effects[reward] += levels
-            is Stat -> player.stats[reward] += levels
+            is Effect -> player.effects[reward] += toGive
+            is Stat -> player.stats[reward] += toGive
         }
     }
 }

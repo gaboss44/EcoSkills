@@ -12,6 +12,8 @@ import com.willfp.eco.util.containsIgnoreCase
 import com.willfp.eco.util.namespacedKeyOf
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
+import org.bukkit.NamespacedKey
+import org.bukkit.Registry
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -127,13 +129,18 @@ class ActionBarHandler(
     }
 
     object PlayerHealthInjectable : PlaceholderInjectable {
+
+        private val maxHealthKey = NamespacedKey.minecraft("max_health")
+
         private val injections = listOf(
             PlayerStaticPlaceholder(
                 "health"
             ) { it.health.toInt().toString() },
             PlayerStaticPlaceholder(
                 "max_health"
-            ) { it.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value?.toInt()?.toString() ?: "20" },
+            ) { it.getAttribute(
+                Registry.ATTRIBUTE.getOrThrow(maxHealthKey))
+                ?.value?.toInt()?.toString() ?: "20" },
         )
 
         override fun getPlaceholderInjections(): List<InjectablePlaceholder> {

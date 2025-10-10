@@ -27,7 +27,6 @@ import com.willfp.ecoskills.stats.Stats
 import com.willfp.ecoskills.util.InvalidConfigurationException
 import com.willfp.ecoskills.util.LevelInjectable
 import com.willfp.ecoskills.util.loadDescriptionPlaceholders
-import com.willfp.libreforge.EmptyProvidedHolder
 import com.willfp.libreforge.NamedValue
 import com.willfp.libreforge.ViolationContext
 import com.willfp.libreforge.conditions.Conditions
@@ -59,6 +58,8 @@ class Skill(
         ViolationContext(plugin, "Skill $id conditions")
     )
 
+    val xpGainActionBarMsg = config.getStringOrNull("xp-gain-action-bar-message")
+
     private val xpFormula = config.getStringOrNull("xp-formula")
 
     private val requirements = config.getDoublesOrNull("xp-requirements")
@@ -75,7 +76,17 @@ class Skill(
             it.getIntOrNull("start-level"),
             it.getIntOrNull("end-level"),
             it.getIntOrNull("every"),
-            it.getIntsOrNull("level-list")
+            it.getIntsOrNull("level-list"),
+            it.getIntsOrNull("not-level-list"),
+            it.getSubsectionOrNull("override-levels")?.let { sub ->
+                val map = mutableMapOf<Int,Int>()
+                for (key in sub.getKeys(false)) {
+                    val var1 = key.toIntOrNull() ?: continue
+                    val var2 = sub.getIntOrNull(key) ?: continue
+                    map[var1] = var2
+                }
+                map.toMap()
+            }
         )
     }
 

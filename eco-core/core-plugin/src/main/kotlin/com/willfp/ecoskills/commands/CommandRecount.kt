@@ -41,7 +41,7 @@ class CommandRecount(plugin: EcoPlugin) :
             for (skill in Skills.values()) {
                 val level = player.getSkillLevel(skill)
                 if (level > 0) {
-                    for (i in (0 until level)) {
+                    for (i in (1 .. level)) {
                         skill.giveRewards(player, i)
                     }
                 }

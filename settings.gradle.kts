@@ -3,7 +3,9 @@ pluginManagement {
         gradlePluginPortal()
         mavenLocal()
         maven("https://repo.auxilor.io/repository/maven-public/")
+        //maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
         maven("https://repo.papermc.io/repository/maven-public/")
+        //maven("https://repo.aikar.co/nexus/content/repositories/")
     }
 }
 

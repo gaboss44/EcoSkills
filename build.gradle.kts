@@ -44,6 +44,12 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
+        //maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+
+        //maven("https://oss.sonatype.org/content/repositories/snapshots")
+        //maven("https://oss.sonatype.org/content/repositories/central")
+        //maven("https://repo.aikar.co/nexus/content/repositories/aikar")
+        //maven("https://repo.glaremasters.me/repository/public/")
 
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://repo.auxilor.io/repository/maven-public/")
@@ -59,7 +65,7 @@ allprojects {
 
     java {
         withSourcesJar()
-        toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+        toolchain.languageVersion.set(JavaLanguageVersion.of(21))
     }
 
     tasks {
@@ -70,7 +76,7 @@ allprojects {
 
         compileKotlin {
             compilerOptions {
-                jvmTarget = JvmTarget.JVM_17
+                jvmTarget = JvmTarget.JVM_21
             }
         }
 
